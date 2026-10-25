@@ -1,4 +1,4 @@
-import streamlit as st
+\import streamlit as st
 import pandas as pd
 import numpy as np
 
@@ -9,11 +9,16 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom Styling for Advanced Look
+# Custom Styling for Golden, Black & Colorful Dark Theme (No White Background)
 st.markdown("""
     <style>
-    .main { background-color: #f8f9fa; }
-    .stMetric { background-color: #ffffff; padding: 15px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .main { background-color: #0e0e0e; color: #f5f5f5; }
+    .stSidebar { background-color: #161616; }
+    .stMetric { background-color: #1a1a1a; padding: 15px; border-radius: 10px; border: 1px solid #d4af37; box-shadow: 0 4px 10px rgba(212,175,55,0.15); }
+    h1, h2, h3 { color: #d4af37; font-family: sans-serif; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+    .stButton>button { background: linear-gradient(135deg, #d4af37, #aa8c2c); color: #000000; font-weight: bold; border-radius: 6px; border: none; padding: 10px 20px; }
+    .stButton>button:hover { background: linear-gradient(135deg, #f3e5ab, #d4af37); color: #000000; }
+    .stSelectbox, .stTextInput, .stTextArea { background-color: #1a1a1a; color: #ffffff; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -83,7 +88,7 @@ elif app_mode == "4. Threat Cue Highlighter":
     st.header("💡 AI Threat Cue Highlighter")
     sample_text = "Your payroll access will be locked unless you verify your credentials immediately."
     st.markdown(f"**Original Text:** {sample_text}")
-    st.markdown("**Highlighted Cues:** <span style='background-color: #ffcccc; color: red;'>payroll access will be locked</span>, <span style='background-color: #ffcccc; color: red;'>immediately</span>", unsafe_allow_html=True)
+    st.markdown("**Highlighted Cues:** <span style='background-color: #d4af37; color: #000000; padding: 2px 6px; border-radius: 4px; font-weight: bold;'>payroll access will be locked</span>, <span style='background-color: #d4af37; color: #000000; padding: 2px 6px; border-radius: 4px; font-weight: bold;'>immediately</span>", unsafe_allow_html=True)
 
 # 5. Abstain Threshold Slider
 elif app_mode == "5. Abstain Threshold Slider":
@@ -130,4 +135,4 @@ elif app_mode == "10. URL Defang Inspector":
 
 # Footer
 st.markdown("---")
-st.markdown("<p style='text-align: center; color: gray;'>PhishShift ML-07 Project Dashboard | Cybernaut Student Edition</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #d4af37;'>PhishShift ML-07 Project Dashboard | Cybernaut Student Edition</p>", unsafe_allow_html=True)
