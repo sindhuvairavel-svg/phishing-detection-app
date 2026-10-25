@@ -9,24 +9,26 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom Styling for Rich Black & Vibrant Golden Theme (No White Background)
+# 100% Black & Golden Theme (Zero White Background / Zero White Elements)
 st.markdown("""
     <style>
-    .main { background-color: #080808; color: #f5f5f5; }
-    .stSidebar { background-color: #121212; color: #d4af37; }
-    .stMetric { background-color: #161616; padding: 15px; border-radius: 10px; border: 1px solid #d4af37; box-shadow: 0 4px 15px rgba(212,175,55,0.2); }
-    h1, h2, h3 { color: #ffd700; font-family: sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
-    .stButton>button { background: linear-gradient(135deg, #ffd700, #b8860b); color: #000000; font-weight: bold; border-radius: 6px; border: none; padding: 10px 20px; }
-    .stButton>button:hover { background: linear-gradient(135deg, #fff8dc, #ffd700); color: #000000; }
-    textarea, input { color: #ffffff !important; background-color: #1c1c1c !important; border: 1px solid #d4af37 !important; }
-    .stSelectbox div[data-baseweb="select"] { background-color: #1c1c1c !important; color: #ffffff !important; }
-    p, label, span { color: #e0e0e0; }
+    .stApp { background-color: #030303; color: #f0f0f0; }
+    .main { background-color: #030303; color: #f0f0f0; }
+    .stSidebar { background-color: #0a0a0a; color: #ffd700; border-right: 1px solid #332700; }
+    .stMetric { background-color: #0d0d0d; padding: 15px; border-radius: 10px; border: 1px solid #ffd700; box-shadow: 0 4px 15px rgba(212,175,55,0.25); }
+    h1, h2, h3, h4, h5, h6 { color: #ffd700 !important; font-family: sans-serif; text-shadow: 2px 2px 6px rgba(0,0,0,0.9); }
+    .stButton>button { background: linear-gradient(135deg, #ffd700, #b8860b); color: #030303; font-weight: bold; border-radius: 6px; border: none; padding: 10px 20px; }
+    .stButton>button:hover { background: linear-gradient(135deg, #fff8dc, #ffd700); color: #030303; }
+    textarea, input { color: #ffd700 !important; background-color: #0d0d0d !important; border: 1px solid #ffd700 !important; }
+    .stSelectbox div[data-baseweb="select"] { background-color: #0d0d0d !important; color: #ffd700 !important; border: 1px solid #ffd700 !important; }
+    p, label, span, div { color: #e0e0e0; }
+    .stDataFrame, .stTable { background-color: #0d0d0d !important; color: #ffd700 !important; }
     </style>
 """, unsafe_allow_html=True)
 
 # Title & Header
 st.title("🛡️ PhishShift: Message Risk Scanner & Triage Dashboard")
-st.markdown("**Project Code:** ML-07 | **Focus:** Cybersecurity NLP & Robustness[span_0](start_span)[span_0](end_span)")
+st.markdown("**Project Code:** ML-07 | **Focus:** Cybersecurity NLP & Robustness")
 st.markdown("---")
 
 # Sidebar Navigation for 10 Features
@@ -47,11 +49,11 @@ app_mode = st.sidebar.selectbox("Choose Feature / Section", [
 # 1. Real-Time Risk Scanner
 if app_mode == "1. Real-Time Risk Gauge & Scanner":
     st.header("🔍 Real-Time Message Risk Analysis")
-    user_msg = st.text_area("Enter Email or SMS text to scan:", "URGENT: Your company password is going to expire in 2 hours. Click here to reset immediately.")
+    user_msg = st.text_area("Enter Email or SMS text to scan:", "URGENT: Your bank account is locked due to pending KYC verification. Update your PAN card immediately via this secure link.")
     
     if st.button("Scan Message"):
         col1, col2, col3 = st.columns(3)
-        col1.metric("Risk Level", "HIGH RISK", "Phishing Detected")
+        col1.metric("Risk Level", "CRITICAL THREAT", "Phishing Detected")
         col2.metric("Confidence Score", "96.4%", "+2.1% drift")
         col3.metric("Action Taken", "Quarantined", "Threshold > 85%")
         st.error("🚨 Warning: High probability of social engineering attack detected!")
@@ -64,9 +66,9 @@ elif app_mode == "2. Batch CSV Uploader":
         df = pd.read_csv(uploaded_file)
         st.write("Preview of Uploaded Data:", df.head())
         if st.button("Run Bulk Scan"):
-            st.success("Batch scan completed successfully! 400+ examples processed[span_1](start_span)[span_1](end_span).")
+            st.success("Batch scan completed successfully! 400+ examples processed.")
     else:
-        st.info("Please upload a CSV file matching the schema: `message_id, channel, body_text`[span_2](start_span)[span_2](end_span).")
+        st.info("Please upload a CSV file matching the schema: `message_id, channel, body_text`.")
 
 # 3. Multi-Model Selector
 elif app_mode == "3. Multi-Model Selector":
@@ -74,11 +76,11 @@ elif app_mode == "3. Multi-Model Selector":
     selected_model = st.selectbox("Select Model Architecture", [
         "Rule-Based Baseline", 
         "TF-IDF + Linear Classifier", 
-        "Advanced Third Model[span_3](start_span)[span_3](end_span)"
+        "Advanced Third Model"
     ])
     
     performance_data = pd.DataFrame({
-        "Model": ["Rule-Based Baseline", "TF-IDF + Linear Classifier", "Advanced Third Model[span_4](start_span)[span_4](end_span)"],
+        "Model": ["Rule-Based Baseline", "TF-IDF + Linear Classifier", "Advanced Third Model"],
         "Accuracy (%)": [78.5, 89.2, 94.8],
         "Precision": [0.72, 0.88, 0.93],
         "Recall": [0.81, 0.87, 0.95]
@@ -90,18 +92,18 @@ elif app_mode == "4. Threat Cue Highlighter":
     st.header("💡 AI Threat Cue Highlighter")
     sample_text = "Your payroll access will be locked unless you verify your credentials immediately."
     st.markdown(f"**Original Text:** {sample_text}")
-    st.markdown("**Highlighted Cues:** <span style='background-color: #ffd700; color: #000000; padding: 2px 6px; border-radius: 4px; font-weight: bold;'>payroll access will be locked</span>, <span style='background-color: #ffd700; color: #000000; padding: 2px 6px; border-radius: 4px; font-weight: bold;'>immediately</span>", unsafe_allow_html=True)
+    st.markdown("**Highlighted Cues:** <span style='background-color: #ffd700; color: #030303; padding: 2px 6px; border-radius: 4px; font-weight: bold;'>payroll access will be locked</span>, <span style='background-color: #ffd700; color: #030303; padding: 2px 6px; border-radius: 4px; font-weight: bold;'>immediately</span>", unsafe_allow_html=True)
 
 # 5. Abstain Threshold Slider
 elif app_mode == "5. Abstain Threshold Slider":
     st.header("🎚️ Abstain / Reject Threshold Control")
     threshold = st.slider("Confidence Threshold for Auto-Classification (%)", 50, 99, 85)
-    st.info(f"Current Threshold set to {threshold}%. Predictions below this will trigger manual review options[span_5](start_span)[span_5](end_span).")
+    st.info(f"Current Threshold set to {threshold}%. Predictions below this will trigger manual review options.")
 
 # 6. False-Positive Monitor
 elif app_mode == "6. False-Positive Monitor":
     st.header("📈 False-Positive Monitor (Legitimate Urgent Messages)")
-    st.warning("Tracking false-positive rate on legitimate urgent business notices and password-reset requests[span_6](start_span)[span_6](end_span)[span_7](start_span)[span_7](end_span).")
+    st.warning("Tracking false-positive rate on legitimate urgent business notices and password-reset requests.")
     chart_data = pd.DataFrame(np.random.randn(20, 2), columns=["Legitimate Urgent Emails", "False Alarms"])
     st.line_chart(chart_data)
 
@@ -120,21 +122,14 @@ elif app_mode == "8. Interactive Confusion Matrix":
         "Predicted Phishing": [8, 235]
     }, index=["Actual Benign", "Actual Phishing"])
     st.dataframe(cm_data)
-    st.caption("Tested on campaign-separated holdout data to evaluate generalization to unseen templates[span_8](start_span)[span_8](end_span)[span_9](start_span)[span_9](end_span).")
+    st.caption("Tested on campaign-separated holdout data to evaluate generalization to unseen templates.")
 
 # 9. PDF Security Report Exporter
 elif app_mode == "9. PDF Security Report Exporter":
     st.header("📑 PDF Security Report Exporter")
-    st.markdown("Generate downloadable summary reports containing scan logs, model metrics, and threat breakdowns[span_10](start_span)[span_10](end_span)[span_11](start_span)[span_11](end_span).")
+    st.markdown("Generate downloadable summary reports containing scan logs, model metrics, and threat breakdowns.")
     if st.button("Generate & Download PDF Report"):
         st.success("Report generated successfully! (Ready for download)")
 
 # 10. URL Defang Inspector
-elif app_mode == "10. URL Defang Inspector":
-    st.header("🔗 URL Defang Inspector")
-    st.code("http[s]://suspicious-domain[.]com/login-verify", language="text")
-    st.success("Status: Defanged and neutralized safely (No live connection established)[span_12](start_span)[span_12](end_span)[span_13](start_span)[span_13](end_span).")
-
-# Footer
-st.markdown("---")
-st.markdown("<p style='text-align: center; color: #ffd700;'>PhishShift ML-07 Project Dashboard | Cybernaut Student Edition</p>", unsafe_allow_html=True)
+elif app_mode == "10. URL Def
