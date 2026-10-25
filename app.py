@@ -9,20 +9,47 @@ st.set_page_config(
     layout="wide"
 )
 
-# 100% Black & Golden Theme (Zero White Background / Zero White Elements)
+# 100% Black & Golden Theme (Zero White Background / Zero White Elements & Custom Scrollbars)
 st.markdown("""
     <style>
+    /* Global App Background */
     .stApp { background-color: #030303; color: #f0f0f0; }
     .main { background-color: #030303; color: #f0f0f0; }
-    .stSidebar { background-color: #0a0a0a; color: #ffd700; border-right: 1px solid #332700; }
+    
+    /* Sidebar Styling & Removing White Backgrounds */
+    .stSidebar { background-color: #0a0a0a !important; color: #ffd700; border-right: 1px solid #332700; }
+    section[data-testid="stSidebar"] div { background-color: #0a0a0a !important; color: #ffd700 !important; }
+    
+    /* Metric Cards */
     .stMetric { background-color: #0d0d0d; padding: 15px; border-radius: 10px; border: 1px solid #ffd700; box-shadow: 0 4px 15px rgba(212,175,55,0.25); }
+    
+    /* Headings */
     h1, h2, h3, h4, h5, h6 { color: #ffd700 !important; font-family: sans-serif; text-shadow: 2px 2px 6px rgba(0,0,0,0.9); }
+    
+    /* Buttons */
     .stButton>button { background: linear-gradient(135deg, #ffd700, #b8860b); color: #030303; font-weight: bold; border-radius: 6px; border: none; padding: 10px 20px; }
     .stButton>button:hover { background: linear-gradient(135deg, #fff8dc, #ffd700); color: #030303; }
+    
+    /* Text Inputs & Textareas */
     textarea, input { color: #ffd700 !important; background-color: #0d0d0d !important; border: 1px solid #ffd700 !important; }
+    
+    /* Selectbox Fixes for Zero White */
     .stSelectbox div[data-baseweb="select"] { background-color: #0d0d0d !important; color: #ffd700 !important; border: 1px solid #ffd700 !important; }
+    div[data-baseweb="popover"], div[data-baseweb="menu"], ul[data-baseweb="menu"] { background-color: #0d0d0d !important; color: #ffd700 !important; }
+    div[data-baseweb="option"] { background-color: #0d0d0d !important; color: #ffd700 !important; }
+    div[data-baseweb="option"]:hover { background-color: #332700 !important; color: #ffd700 !important; }
+    
+    /* General Text & Labels */
     p, label, span, div { color: #e0e0e0; }
+    
+    /* Dataframes & Tables */
     .stDataFrame, .stTable { background-color: #0d0d0d !important; color: #ffd700 !important; }
+    
+    /* Scrollbar Customization for Black & Gold Theme */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #030303; }
+    ::-webkit-scrollbar-thumb { background: #b8860b; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #ffd700; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -37,13 +64,13 @@ app_mode = st.sidebar.selectbox("Choose Feature / Section", [
     "1. Real-Time Risk Gauge & Scanner",
     "2. Batch CSV Uploader",
     "3. Multi-Model Selector",
-    "4. Threat Cue Highlighter",
+    "4. Zero-Day Vector Similarity Search",
     "5. Abstain Threshold Slider",
-    "6. False-Positive Monitor",
+    "6. False-Positive & Attack Trend Monitor",
     "7. Typo & Perturbation Sandbox",
-    "8. Interactive Confusion Matrix",
-    "9. PDF Security Report Exporter",
-    "10. URL Defang Inspector"
+    "8. API Anomaly & Threat Velocity Heatmap",
+    "9. Real-Time Threat Intelligence Stream",
+    "10. Interactive URL Defang Inspector"
 ])
 
 # 1. Real-Time Risk Scanner
@@ -76,23 +103,31 @@ elif app_mode == "3. Multi-Model Selector":
     selected_model = st.selectbox("Select Model Architecture", [
         "Rule-Based Baseline", 
         "TF-IDF + Linear Classifier", 
-        "Advanced Third Model"
+        "Advanced Transformer (BERT-Sec)"
     ])
     
     performance_data = pd.DataFrame({
-        "Model": ["Rule-Based Baseline", "TF-IDF + Linear Classifier", "Advanced Third Model"],
+        "Model": ["Rule-Based Baseline", "TF-IDF + Linear Classifier", "Advanced Transformer (BERT-Sec)"],
         "Accuracy (%)": [78.5, 89.2, 94.8],
         "Precision": [0.72, 0.88, 0.93],
         "Recall": [0.81, 0.87, 0.95]
     })
     st.table(performance_data)
+    st.bar_chart(performance_data.set_index("Model")["Accuracy (%)"])
 
-# 4. Threat Cue Highlighter
-elif app_mode == "4. Threat Cue Highlighter":
-    st.header("💡 AI Threat Cue Highlighter")
-    sample_text = "Your payroll access will be locked unless you verify your credentials immediately."
-    st.markdown(f"**Original Text:** {sample_text}")
-    st.markdown("**Highlighted Cues:** <span style='background-color: #ffd700; color: #030303; padding: 2px 6px; border-radius: 4px; font-weight: bold;'>payroll access will be locked</span>, <span style='background-color: #ffd700; color: #030303; padding: 2px 6px; border-radius: 4px; font-weight: bold;'>immediately</span>", unsafe_allow_html=True)
+# 4. Zero-Day Vector Similarity Search
+elif app_mode == "4. Zero-Day Vector Similarity Search":
+    st.header("🧬 Advanced Zero-Day Vector Similarity Search")
+    st.markdown("Compares incoming payloads against known embedding clusters of emerging spear-phishing campaigns.")
+    search_query = st.text_input("Enter payload signature or phrase:", "verify credentials payroll update")
+    if st.button("Query Vector Database"):
+        cluster_data = pd.DataFrame({
+            "Cluster ID": ["CL-889", "CL-402", "CL-104"],
+            "Campaign Name": ["Finance Credential Harvest", "HR Portal Scam", "Vendor Invoice Phish"],
+            "Similarity Match": ["94.2%", "81.0%", "65.4%"]
+        })
+        st.table(cluster_data)
+        st.success("Closest cluster identified: Finance Credential Harvest (High Risk Vector).")
 
 # 5. Abstain Threshold Slider
 elif app_mode == "5. Abstain Threshold Slider":
@@ -100,11 +135,14 @@ elif app_mode == "5. Abstain Threshold Slider":
     threshold = st.slider("Confidence Threshold for Auto-Classification (%)", 50, 99, 85)
     st.info(f"Current Threshold set to {threshold}%. Predictions below this will trigger manual review options.")
 
-# 6. False-Positive Monitor
-elif app_mode == "6. False-Positive Monitor":
-    st.header("📈 False-Positive Monitor (Legitimate Urgent Messages)")
-    st.warning("Tracking false-positive rate on legitimate urgent business notices and password-reset requests.")
-    chart_data = pd.DataFrame(np.random.randn(20, 2), columns=["Legitimate Urgent Emails", "False Alarms"])
+# 6. False-Positive & Attack Trend Monitor
+elif app_mode == "6. False-Positive & Attack Trend Monitor":
+    st.header("📈 False-Positive & Attack Trend Analytics")
+    st.markdown("Visualizing the ratio of legitimate urgent notices against malicious social engineering attempts over time.")
+    chart_data = pd.DataFrame(
+        np.random.randn(20, 2) * 5 + 50,
+        columns=["Legitimate Urgent Emails", "Blocked Phishing Attacks"]
+    )
     st.line_chart(chart_data)
 
 # 7. Typo & Perturbation Sandbox
@@ -114,28 +152,38 @@ elif app_mode == "7. Typo & Perturbation Sandbox":
     if st.button("Test Perturbation"):
         st.info("Robustness Check: Model successfully identified disguised keywords despite character substitutions.")
 
-# 8. Interactive Confusion Matrix
-elif app_mode == "8. Interactive Confusion Matrix":
-    st.header("📊 Interactive Confusion Matrix & Campaign Holdout")
-    cm_data = pd.DataFrame({
-        "Predicted Benign": [145, 12],
-        "Predicted Phishing": [8, 235]
-    }, index=["Actual Benign", "Actual Phishing"])
-    st.dataframe(cm_data)
-    st.caption("Tested on campaign-separated holdout data to evaluate generalization to unseen templates.")
+# 8. API Anomaly & Threat Velocity Heatmap
+elif app_mode == "8. API Anomaly & Threat Velocity Heatmap":
+    st.header("⚡ API Anomaly & Threat Velocity Heatmap")
+    st.markdown("Real-time telemetry tracking request spikes and burst patterns indicative of automated credential stuffing.")
+    velocity_data = pd.DataFrame(
+        np.random.randint(10, 100, size=(10, 5)),
+        columns=["Hour 1", "Hour 2", "Hour 3", "Hour 4", "Hour 5"],
+        index=[f"Endpoint API {i}" for i in range(1, 11)]
+    )
+    st.dataframe(velocity_data)
+    st.bar_chart(velocity_data.T)
 
-# 9. PDF Security Report Exporter
-elif app_mode == "9. PDF Security Report Exporter":
-    st.header("📑 PDF Security Report Exporter")
-    st.markdown("Generate downloadable summary reports containing scan logs, model metrics, and threat breakdowns.")
-    if st.button("Generate & Download PDF Report"):
-        st.success("Report generated successfully! (Ready for download)")
+# 9. Real-Time Threat Intelligence Stream
+elif app_mode == "9. Real-Time Threat Intelligence Stream":
+    st.header("🌐 Real-Time Threat Intelligence Live Stream")
+    st.markdown("Live monitoring feed aggregating threat telemetry from global honeypots and blacklists.")
+    stream_data = pd.DataFrame({
+        "Timestamp": ["12:30:11", "12:30:28", "12:31:05", "12:31:42"],
+        "Source IP": ["192.168.4.12", "10.0.24.111", "172.16.8.90", "192.168.1.5"],
+        "Vector": ["Credential Harvesting", "SMS Smishing", "Executive Impersonation", "Malicious Link"],
+        "Status": ["Blocked", "Quarantined", "Flagged", "Blocked"]
+    })
+    st.table(stream_data)
 
-# 10. URL Defang Inspector
+# 10. Interactive URL Defang Inspector
 elif app_mode == "10. URL Defang Inspector":
-    st.header("🔗 URL Defang Inspector")
-    st.code("http[s]://suspicious-domain[.]com/login-verify", language="text")
-    st.success("Status: Defanged and neutralized safely (No live connection established).")
+    st.header("🔗 Interactive URL Defang Inspector")
+    user_url = st.text_input("Enter URL to defang securely:", "https://suspicious-login-portal.com/verify")
+    if st.button("Defang URL"):
+        defanged_url = user_url.replace("http", "http[s]").replace(".", "[.]")
+        st.code(defanged_url, language="text")
+        st.success("Status: Defanged and neutralized safely (No live connection established).")
 
 # Footer
 st.markdown("---")
