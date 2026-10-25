@@ -132,4 +132,11 @@ elif app_mode == "9. PDF Security Report Exporter":
         st.success("Report generated successfully! (Ready for download)")
 
 # 10. URL Defang Inspector
-elif app_mode == "10. URL Def
+elif app_mode == "10. URL Defang Inspector":
+    st.header("🔗 URL Defang Inspector")
+    st.code("http[s]://suspicious-domain[.]com/login-verify", language="text")
+    st.success("Status: Defanged and neutralized safely (No live connection established).")
+
+# Footer
+st.markdown("---")
+st.markdown("<p style='text-align: center; color: #ffd700;'>PhishShift ML-07 Project Dashboard | Cybernaut Student Edition</p>", unsafe_allow_html=True)
