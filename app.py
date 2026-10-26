@@ -1,602 +1,237 @@
-import streamlit as st
+import time
+import random
 import pandas as pd
-import numpy as np
-import plotly.graph_objects as go
-import re
-from urllib.parse import urlparse
+import streamlit as st
 
-# ---------------- PAGE CONFIG ----------------
+# Page Configuration
 st.set_page_config(
-    page_title="PhishShift | Message Risk Scanner",
+    page_title="Phishing Detection Project - AI Security",
     page_icon="🛡️",
-    layout="wide"
+    layout="wide",
 )
 
-# ---------------- BLACK & GOLD THEME ----------------
-st.markdown("""
-<style>
-.stApp {
-    background-color: #080a0f;
-    color: #f5f5f5;
-}
-[data-testid="stSidebar"] {
-    background-color: #10131b;
-}
-h1, h2, h3 {
-    color: #f5c542 !important;
-}
-div[data-testid="stMetric"] {
-    background: #141923;
-    border: 1px solid #3d3420;
-    padding: 15px;
-    border-radius: 12px;
-}
-.stButton > button {
-    background-color: #f5c542;
-    color: #080a0f;
-    border-radius: 8px;
-    border: none;
-    font-weight: bold;
-}
-.stButton > button:hover {
-    background-color: #ffe082;
-    color: #080a0f;
-}
-</style>
-""", unsafe_allow_html=True)
+# Custom CSS for Dark Theme Dashboard styling matching the image
+st.markdown(
+    """
+    <style>
+    .main { background-color: #0d1117; color: #ffffff; }
+    .stSidebar { background-color: #161b22; }
+    div.stButton > button { background-color: #f1c40f; color: #000000; font-weight: bold; border-radius: 5px; }
+    .metric-card { background-color: #1f242d; padding: 15px; border-radius: 10px; border: 1px solid #30363d; }
+    </style>
+""",
+    unsafe_allow_html=True,
+)
 
-# ---------------- HEADER ----------------
-st.title("🛡️ PhishShift")
-st.caption("MESSAGE RISK SCANNER & SECURITY TRIAGE DASHBOARD")
-st.markdown("---")
-
-# ---------------- SIDEBAR ----------------
-st.sidebar.title("⚙️ Navigation")
-
-page = st.sidebar.radio(
-    "Choose a section",
+# Sidebar Navigation
+st.sidebar.image(
+    "https://img.icons8.com/color/96/shield.png", width=60
+)  # Placeholder logo
+st.sidebar.markdown(
+    "### **Smarter Detection**\nSafer Tomorrow[span_6](start_span)[span_6](end_span)"
+)
+st.sidebar.markdown("---")
+menu = st.sidebar.radio(
+    "Navigation",
     [
-        "Dashboard Overview",
-        "Real-Time Risk Scanner",
-        "Multi-Model Selector",
-        "Risk Threshold",
-        "Threat Monitor",
-        "Typo & Attack Sandbox",
-        "API Anomaly Monitor",
-        "Threat Intelligence",
-        "Prompt Injection Shield",
-        "Explainable AI",
-        "Confidence Calibration",
-        "Advanced Security Monitor"
-    ]
+        "🏠 Home",
+        "🔍 Risk Scanner",
+        "📊 Model Analysis",
+        "🌐 Threat Intelligence",
+        "⚙️ Settings",
+    ],
 )
 
-# ---------------- HELPER FUNCTION ----------------
-def analyse_message(message):
-    """Simple demo heuristic. This is not a trained ML model."""
-
-    text = message.lower()
-    score = 0
-    reasons = []
-
-    suspicious_words = [
-        "verify your account",
-        "urgent",
-        "click here",
-        "password",
-        "bank account",
-        "suspended",
-        "login immediately",
-        "claim your prize",
-        "otp",
-        "free gift",
-        "limited time",
-        "confirm your identity"
-    ]
-
-    for word in suspicious_words:
-        if word in text:
-            score += 12
-            reasons.append(f"Suspicious phrase detected: '{word}'")
-
-    urls = re.findall(r"https?://\S+|www\.\S+", message)
-
-    if urls:
-        score += 15
-        reasons.append("Message contains a URL")
-
-    if re.search(r"\b(password|otp|pin|bank details)\b", text):
-        score += 15
-        reasons.append("Possible request for sensitive information")
-
-    if message.count("!") >= 3:
-        score += 8
-        reasons.append("Excessive exclamation marks")
-
-    if len(message) > 0 and message.isupper():
-        score += 10
-        reasons.append("Entire message is uppercase")
-
-    score = min(score, 100)
-
-    if score >= 60:
-        label = "HIGH RISK"
-    elif score >= 30:
-        label = "MEDIUM RISK"
-    else:
-        label = "LOW RISK"
-
-    if not reasons:
-        reasons.append("No obvious suspicious patterns detected")
-
-    return score, label, reasons
-
-
-# ---------------- DASHBOARD OVERVIEW ----------------
-if page == "Dashboard Overview":
-    st.header("Dashboard Overview")
-    st.write(
-        "Monitor message risks, suspicious patterns, and security signals "
-        "from one dashboard."
+# Top Bar Header
+col_title, col_status = st.columns([3, 1])
+with col_title:
+    st.markdown(
+        "## 🛡️ Phishing Detection Project\n**AI-Powered Email & SMS Security**[span_7](start_span)[span_7](end_span)"
+    )
+with col_status:
+    st.markdown(
+        "🟢 **System Online**  \n📅 Apr 26, 2025 | 10:42 AM[span_8](start_span)[span_8](end_span)",
+        unsafe_allow_html=True,
     )
 
-    col1, col2, col3, col4 = st.columns(4)
-
-    col1.metric("Scanner Status", "READY")
-    col2.metric("Detection Mode", "Rule-Based Demo")
-    col3.metric("Risk Categories", "3")
-    col4.metric("Security Modules", "12")
-
-    st.markdown("### Security Modules")
-
-    c1, c2 = st.columns(2)
-
-    with c1:
-        st.info("🛡️ Real-Time Risk Scanner")
-        st.info("🤖 Multi-Model Selector")
-        st.info("🎚️ Risk Threshold Control")
-        st.info("📈 Threat Monitor")
-        st.info("🔤 Typo & Attack Sandbox")
-        st.info("🔥 API Anomaly Monitor")
-
-    with c2:
-        st.info("🌐 URL Pattern Checker")
-        st.info("🚨 Prompt Injection Shield")
-        st.info("🔍 Explainable AI")
-        st.info("📊 Confidence Calibration")
-        st.info("🔐 Advanced Security Monitor")
-        st.info("⚙️ Detection Settings")
-
-    st.warning(
-        "Demo version: results are generated using simple rules, "
-        "not a trained machine-learning model or live threat-intelligence service."
-    )
-
-
-# ---------------- REAL-TIME RISK SCANNER ----------------
-elif page == "Real-Time Risk Scanner":
-    st.header("🔎 Real-Time Message Risk Scanner")
-
-    message = st.text_area(
-        "Paste a message to analyse",
-        placeholder="Example: Your account is suspended. Verify your account immediately.",
-        height=160
-    )
-
-    if st.button("SCAN MESSAGE"):
-        if not message.strip():
-            st.warning("Please enter a message first.")
-        else:
-            score, label, reasons = analyse_message(message)
-
-            col1, col2 = st.columns(2)
-
-            col1.metric("Risk Score", f"{score}/100")
-            col2.metric("Risk Classification", label)
-
-            fig = go.Figure(
-                go.Indicator(
-                    mode="gauge+number",
-                    value=score,
-                    title={"text": "Message Risk Level"},
-                    gauge={
-                        "axis": {"range": [0, 100]},
-                        "bar": {"color": "#f5c542"},
-                        "steps": [
-                            {"range": [0, 30], "color": "#164e36"},
-                            {"range": [30, 60], "color": "#70551b"},
-                            {"range": [60, 100], "color": "#702727"}
-                        ]
-                    }
-                )
-            )
-
-            fig.update_layout(
-                paper_bgcolor="#080a0f",
-                font_color="white",
-                height=300
-            )
-
-            st.plotly_chart(fig, use_container_width=True)
-
-            st.subheader("Why was this result produced?")
-
-            for reason in reasons:
-                st.write("•", reason)
-
-            if score >= 60:
-                st.error("High-risk patterns detected. Verify the message independently.")
-            elif score >= 30:
-                st.warning("Some suspicious patterns were found. Check carefully.")
-            else:
-                st.success("Few suspicious patterns were found.")
-
-            st.caption(
-                "A low score does not guarantee that a message is safe."
-            )
-
-
-# ---------------- MULTI-MODEL SELECTOR ----------------
-elif page == "Multi-Model Selector":
-    st.header("🤖 Detection Model Selector")
-
-    model = st.selectbox(
-        "Choose a demonstration profile",
-        [
-            "Balanced Detection",
-            "High Sensitivity",
-            "Low False-Alarm Mode",
-            "Fast Screening"
-        ]
-    )
-
-    details = {
-        "Balanced Detection":
-            "Balances suspicious-message detection and false alarms.",
-        "High Sensitivity":
-            "Designed to flag more suspicious messages, but may flag more safe messages too.",
-        "Low False-Alarm Mode":
-            "Uses a more cautious approach before marking a message suspicious.",
-        "Fast Screening":
-            "A simple, lightweight screening profile."
-    }
-
-    st.subheader(model)
-    st.write(details[model])
-
-    st.warning(
-        "These are demonstration profiles. They do not load separate trained AI models."
-    )
-
-
-# ---------------- RISK THRESHOLD ----------------
-elif page == "Risk Threshold":
-    st.header("🎚️ Risk Threshold Control")
-
-    threshold = st.slider(
-        "Choose the risk score at which a message is flagged",
-        min_value=10,
-        max_value=90,
-        value=60,
-        step=5
-    )
-
-    st.metric("Selected Threshold", f"{threshold}/100")
-
-    sample_score = st.slider(
-        "Try a sample risk score",
-        min_value=0,
-        max_value=100,
-        value=45
-    )
-
-    if sample_score >= threshold:
-        st.error("This sample would be flagged for review.")
-    else:
-        st.success("This sample would not be flagged by this threshold.")
-
-    st.caption(
-        "A lower threshold flags more messages; a higher threshold may miss some threats."
-    )
-
-
-# ---------------- THREAT MONITOR ----------------
-elif page == "Threat Monitor":
-    st.header("📈 False-Positive & Attack Trend Monitor")
-
-    st.write("Illustrative demonstration data — not live security telemetry.")
-
-    dates = pd.date_range(end=pd.Timestamp.today(), periods=7)
-
-    data = pd.DataFrame({
-        "Day": dates.strftime("%a"),
-        "Flagged Messages": np.random.randint(10, 60, 7),
-        "False Alarms": np.random.randint(1, 15, 7),
-        "Attack Attempts": np.random.randint(5, 45, 7)
-    })
-
-    st.line_chart(
-        data.set_index("Day")[[
-            "Flagged Messages",
-            "False Alarms",
-            "Attack Attempts"
-        ]]
-    )
-
-    st.dataframe(data, use_container_width=True, hide_index=True)
-
-
-# ---------------- TYPO & ATTACK SANDBOX ----------------
-elif page == "Typo & Attack Sandbox":
-    st.header("🔤 Typo & Perturbation Sandbox")
-
-    original = st.text_input(
-        "Enter a sample message",
-        value="Verify your account immediately"
-    )
-
-    variation = st.selectbox(
-        "Choose a test variation",
-        [
-            "Original Text",
-            "Uppercase Text",
-            "Extra Exclamation Marks",
-            "Extra Spaces"
-        ]
-    )
-
-    if variation == "Uppercase Text":
-        modified = original.upper()
-    elif variation == "Extra Exclamation Marks":
-        modified = original + "!!!"
-    elif variation == "Extra Spaces":
-        modified = "  ".join(original.split())
-    else:
-        modified = original
-
-    st.subheader("Modified Message")
-    st.code(modified)
-
-    score, label, reasons = analyse_message(modified)
-
-    col1, col2 = st.columns(2)
-    col1.metric("Risk Score", f"{score}/100")
-    col2.metric("Risk Label", label)
-
-    st.write("Detected patterns:")
-    for reason in reasons:
-        st.write("•", reason)
-
-
-# ---------------- API ANOMALY MONITOR ----------------
-elif page == "API Anomaly Monitor":
-    st.header("🔥 API Anomaly & Threat Velocity Monitor")
-
-    st.write("Synthetic sample data for interface demonstration.")
-
-    rows = ["API-1", "API-2", "API-3", "API-4", "API-5"]
-    columns = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00"]
-
-    heatmap_data = np.random.randint(0, 100, (len(rows), len(columns)))
-
-    fig = go.Figure(
-        data=go.Heatmap(
-            z=heatmap_data,
-            x=columns,
-            y=rows,
-            colorscale=[
-                [0, "#142d25"],
-                [0.5, "#9c7622"],
-                [1, "#b83232"]
-            ],
-            colorbar={"title": "Activity"}
-        )
-    )
-
-    fig.update_layout(
-        paper_bgcolor="#080a0f",
-        plot_bgcolor="#080a0f",
-        font_color="white"
-    )
-
-    st.plotly_chart(fig, use_container_width=True)
-
-    st.info(
-        "To monitor real API activity, connect this page to actual server logs or monitoring data."
-    )
-
-
-# ---------------- THREAT INTELLIGENCE ----------------
-elif page == "Threat Intelligence":
-    st.header("🌐 URL Pattern Checker")
-
-    url = st.text_input(
-        "Enter a URL to inspect",
-        placeholder="https://example.com"
-    )
-
-    if st.button("CHECK URL"):
-        if not url.strip():
-            st.warning("Please enter a URL.")
-        else:
-            check_url = url.strip()
-
-            if not check_url.startswith(("http://", "https://")):
-                check_url = "https://" + check_url
-
-            parsed = urlparse(check_url)
-            domain = parsed.netloc.lower()
-            findings = []
-
-            if not domain:
-                findings.append("URL format appears invalid.")
-
-            if parsed.scheme == "http":
-                findings.append("The URL uses HTTP rather than HTTPS.")
-
-            if "@" in check_url:
-                findings.append("The URL contains an @ symbol.")
-
-            if len(domain) > 45:
-                findings.append("The domain name is unusually long.")
-
-            if any(char.isdigit() for char in domain):
-                findings.append("The domain contains numeric characters.")
-
-            if domain.count("-") >= 3:
-                findings.append("The domain contains several hyphens.")
-
-            if not findings:
-                st.success("No obvious URL warning patterns detected.")
-            else:
-                for finding in findings:
-                    st.warning(finding)
-
-            st.caption(
-                "This is a basic URL-pattern check. It does not verify the URL against live threat-intelligence databases. Do not open suspicious links."
-            )
-
-
-# ---------------- PROMPT INJECTION SHIELD ----------------
-elif page == "Prompt Injection Shield":
-    st.header("🚨 Prompt Injection & Jailbreak Shield")
-
-    prompt = st.text_area(
-        "Enter text to inspect",
-        placeholder="Paste text you want to check for suspicious instruction patterns.",
-        height=150
-    )
-
-    if st.button("INSPECT TEXT"):
-        lowered = prompt.lower()
-
-        patterns = [
-            "ignore all previous instructions",
-            "reveal your system prompt",
-            "bypass security",
-            "ignore the rules",
-            "reveal confidential information",
-            "act as an unrestricted ai",
-            "disregard previous instructions"
-        ]
-
-        found = [p for p in patterns if p in lowered]
-
-        if found:
-            st.error("Potential prompt-injection patterns detected.")
-            for item in found:
-                st.write("•", item)
-        else:
-            st.success("No listed prompt-injection phrases were detected.")
-
-        st.caption(
-            "This phrase checker is only a basic demonstration and cannot detect every attack."
-        )
-
-
-# ---------------- EXPLAINABLE AI ----------------
-elif page == "Explainable AI":
-    st.header("🔍 Explainable AI (XAI)")
-
-    st.write(
-        "This section explains which visible text patterns contributed to a demo risk score."
-    )
-
-    message = st.text_area(
-        "Enter a message",
-        placeholder="Your account is suspended. Verify your account now."
-    )
-
-    if st.button("EXPLAIN RESULT"):
-        if message.strip():
-            score, label, reasons = analyse_message(message)
-
-            st.metric("Risk Score", f"{score}/100")
-            st.metric("Classification", label)
-
-            st.subheader("Contributing Signals")
-
-            for reason in reasons:
-                st.write("🔸", reason)
-        else:
-            st.warning("Enter a message to explain.")
-
-
-# ---------------- CONFIDENCE CALIBRATION ----------------
-elif page == "Confidence Calibration":
-    st.header("📊 Confidence Calibration")
-
-    st.write(
-        "Explore how a hypothetical confidence value maps to a display category."
-    )
-
-    confidence = st.slider(
-        "Sample confidence",
-        min_value=0,
-        max_value=100,
-        value=75
-    )
-
-    st.metric("Sample Confidence", f"{confidence}%")
-
-    if confidence >= 80:
-        st.success("High confidence in this demonstration value.")
-    elif confidence >= 50:
-        st.warning("Medium confidence in this demonstration value.")
-    else:
-        st.error("Low confidence in this demonstration value.")
-
-    st.caption(
-        "This is an illustrative slider, not a calibrated probability from a trained model."
-    )
-
-
-# ---------------- ADVANCED SECURITY MONITOR ----------------
-elif page == "Advanced Security Monitor":
-    st.header("🔐 Advanced Security Monitor")
-
-    st.write("Enter sample counts to calculate simple monitoring indicators.")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        total = st.number_input(
-            "Total messages checked",
-            min_value=0,
-            max_value=1000000,
-            value=100
-        )
-
-    with col2:
-        flagged = st.number_input(
-            "Messages flagged",
-            min_value=0,
-            max_value=1000000,
-            value=15
-        )
-
-    if st.button("CALCULATE INDICATORS"):
-        if total == 0:
-            st.warning("Total messages must be greater than zero.")
-        elif flagged > total:
-            st.warning("Flagged messages cannot exceed total messages.")
-        else:
-            rate = (flagged / total) * 100
-
-            col1, col2 = st.columns(2)
-            col1.metric("Flagged Messages", int(flagged))
-            col2.metric("Flagged Rate", f"{rate:.2f}%")
-
-            st.progress(min(rate / 100, 1.0))
-
-            st.caption(
-                "This is a simple count-based indicator, not a verified threat detection rate."
-            )
-
-
-# ---------------- FOOTER ----------------
 st.markdown("---")
-st.caption(
-    "PhishShift | Educational Prototype | Rule-Based Demo | "
-    "Not a substitute for verified security tools"
-)
+
+# ==================== HOME & QUICK SCAN TAB ====================
+if menu == "🏠 Home" or menu == "🔍 Risk Scanner":
+
+  row1_col1, row1_col2, row1_col3 = st.columns([1.2, 1.2, 1.1])
+
+  # Quick Scan Section
+  with row1_col1:
+    st.markdown("### ⚡ Quick Scan")
+    st.markdown(
+        "<p style='font-size:12px; color:gray;'>Check if a message is phishing or safe[span_9](start_span)[span_9](end_span)</p>",
+        unsafe_allow_html=True,
+    )
+
+    scan_type = st.radio(
+        "Type", ["Email", "SMS"], horizontal=True, label_visibility="collapsed"
+    )
+    user_input = st.text_area(
+        "Enter content",
+        placeholder="e.g., https://example.com/verify-account[span_10](start_span)[span_10](end_span)",
+        height=100,
+    )
+
+    if st.button("Scan"):
+      if user_input:
+        with st.spinner("Analyzing message with AI models..."):
+          time.sleep(1)
+        st.session_state["scanned"] = True
+        st.session_state["input_text"] = user_input
+      else:
+        st.warning("Please enter some text to scan.")
+
+  # Detection Result Section
+  with row1_col2:
+    st.markdown("### 🎯 Detection Result")
+    if st.session_state.get("scanned", False):
+      st.markdown(
+          "<h3 style='color: #ff4d4d;'>⚠️ Phishing</h3>", unsafe_allow_html=True
+      )
+      st.markdown("**Risk Score:** <span style='color:red;'>82.6%</span>", unsafe_allow_html=True) #[span_11](start_span)[span_11](end_span)
+      st.markdown("**Confidence:** 91.2%[span_12](start_span)[span_12](end_span)")
+      st.markdown("**Model:** Random Forest[span_13](start_span)[span_13](end_span)")
+      st.markdown(
+          "**Threat Level:** <span style='color:red;'>High</span>",
+          unsafe_allow_html=True,
+      )
+      st.error(
+          "🚨 Do not click. This looks suspicious."
+      )  #[span_14](start_span)[span_14](end_span)
+    else:
+      st.info(
+          "Perform a Quick Scan to view the risk score and classification"
+          " results."
+      )
+
+  # Model Performance Summary
+  with row1_col3:
+    st.markdown("### 📈 Model Performance")
+    st.selectbox(
+        "Select Model", ["Random Forest", "SVM", "Logistic Regression", "Naive Bayes"], label_visibility="collapsed"
+    )
+
+    m1, m2, m3, m4 = st.columns(4)
+    m1.metric("Accuracy", "94.2%")  #[span_15](start_span)[span_15](end_span)
+    m2.metric("Precision", "92.2%")  #[span_16](start_span)[span_16](end_span)
+    m3.metric("Recall", "88.8%")  #[span_17](start_span)[span_17](end_span)
+    m4.metric("F1-Score", "90.5%")  #[span_18](start_span)[span_18](end_span)
+
+  st.markdown("---")
+
+  # Row 2: XAI & Advanced Security
+  row2_col1, row2_col2, row2_col3 = st.columns([1.2, 1.2, 1.1])
+
+  with row2_col1:
+    st.markdown("### 🔍 Explainable AI (XAI)")
+    st.markdown(
+        "<p style='font-size:12px; color:gray;'>Why this message is flagged?[span_19](start_span)[span_19](end_span)</p>",
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        "> *Congratulations! You have won a free gift. Click here to claim"
+        " now: <span style='color:red;'>https://bit.ly/7x1z</span>*[span_20](start_span)[span_20](end_span)",
+        unsafe_allow_html=True,
+    )
+
+    st.markdown("**Key Factors:**[span_21](start_span)[span_21](end_span)")
+    st.progress(0.38, text="Suspicious URL (0.38)[span_22](start_span)[span_22](end_span)")
+    st.progress(0.24, text="Urgent Language (0.24)[span_23](start_span)[span_23](end_span)")
+    st.progress(0.18, text="Free Gift / Reward (0.18)[span_24](start_span)[span_24](end_span)")
+    st.progress(0.12, text="Shortened Domain (0.12)[span_25](start_span)[span_25](end_span)")
+
+  with row2_col2:
+    st.markdown("### 📊 False Detection Monitor")
+    st.markdown(
+        "<p style='font-size:12px; color:gray;'>Track model mistakes and reduce"
+        " them[span_26](start_span)[span_26](end_span)</p>",
+        unsafe_allow_html=True,
+    )
+    f_col1, f_col2 = st.columns(2)
+    f_col1.metric("False Positives", "12 (1.8%)")  #[span_27](start_span)[span_27](end_span)
+    f_col2.metric("False Negatives", "7 (1.1%)")  #[span_28](start_span)[span_28](end_span)
+
+    # Error Rate trend chart placeholder
+    chart_data = pd.DataFrame(
+        {
+            "False Positives": [3, 4, 3, 5, 4, 3],
+            "False Negatives": [2, 1, 2, 1, 2, 1],
+        },
+        index=["Apr 20", "Apr 21", "Apr 22", "Apr 23", "Apr 24", "Apr 25"],
+    )  #[span_29](start_span)[span_29](end_span)
+    st.line_chart(chart_data, height=150)
+
+  with row2_col3:
+    st.markdown("### 🛡️ Advanced Security")
+    st.markdown(
+        "<p style='font-size:12px; color:gray;'>Extra protection layers</p>",
+        unsafe_allow_html=True,
+    )
+    st.toggle("Threat Intelligence", value=True)  #[span_30](start_span)[span_30](end_span)
+    st.toggle("URL Reputation Check", value=True)  #[span_31](start_span)[span_31](end_span)
+    st.toggle("IP Reputation Check", value=True)  #[span_32](start_span)[span_32](end_span)
+    st.toggle("Malicious Domain Detection", value=True)  #[span_33](start_span)[span_33](end_span)
+    st.toggle("Behaviour Analysis", value=True)  #[span_34](start_span)[span_34](end_span)
+
+# ==================== MODEL ANALYSIS TAB ====================
+elif menu == "📊 Model Analysis":
+  st.markdown("### 📊 Comprehensive Model Analysis")
+  st.markdown(
+      "Compare accuracy across different machine learning models used for"
+      " phishing detection."
+  )
+
+  perf_df = pd.DataFrame(
+      {
+          "Model": [
+              "Random Forest",
+              "SVM",
+              "Logistic Regression",
+              "Naive Bayes",
+          ],
+          "Accuracy (%)": [94.2, 89.1, 86.7, 82.3],  #[span_35](start_span)[span_35](end_span)
+      }
+  )
+  st.bar_chart(perf_df.set_index("Model"))
+
+  st.markdown("### 🎛️ Threshold Optimizer")
+  threshold = st.slider("Select Threshold", 50, 99, 72)  #[span_36](start_span)[span_36](end_span)
+  st.write(f"Current Optimized Threshold: {threshold}%")
+
+# ==================== THREAT INTELLIGENCE TAB ====================
+elif menu == "🌐 Threat Intelligence":
+  st.markdown("### 🌐 Real-Time Threat Intelligence & Global Attack Map")
+  st.markdown(
+      "Live threat data tracking malicious domains, phishing URLs, and C2"
+      " servers[span_37](start_span)[span_37](end_span)."
+  )
+
+  t1, t2, t3, t4 = st.columns(4)
+  t1.metric("Malicious Domains", "124")  #[span_38](start_span)[span_38](end_span)
+  t2.metric("Phishing URLs", "342")  #[span_39](start_span)[span_39](end_span)
+  t3.metric("C2 Servers", "67")  #[span_40](start_span)[span_40](end_span)
+  t4.metric("Suspicious IPs", "218")  #[span_41](start_span)[span_41](end_span)
+
+  st.map(
+      pd.DataFrame(
+          {
+              "lat": [37.7749, 51.5074, 35.6762, 28.6139],
+              "lon": [-122.4194, -0.1278, 139.6503, 77.2090],
+          }
+      )
+  )
+
+# ==================== SETTINGS TAB ====================
+elif menu == "⚙️ Settings":
+  st.markdown("### ⚙️ System Settings")
+  st.text_input("API Key Configuration", "sk-ant-api03-xxxxxxxx")
+  st.number_input("Batch Scan Limit (Max Rows)", 100, 1000, 500)  #[span_42](start_span)[span_42](end_span)
+  st.checkbox("Enable Real-Time Alerts", value=True)
+  if st.button("Save Settings"):
+    st.success("Settings saved successfully!")
