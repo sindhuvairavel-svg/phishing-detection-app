@@ -5,69 +5,54 @@ import streamlit as st
 
 # Page Configuration
 st.set_page_config(
-    page_title="Phishing Detection Project - Dark Golden Theme",
+    page_title="Phishing Detection Project - Colorful & Clean UI",
     page_icon="🛡️",
     layout="wide",
 )
 
-# Custom CSS for Full Black & Dark Golden Theme (No White)
+# Custom Clean & Colorful CSS (No harsh boxes, modern vibrant palette with green, red, cream)
 st.markdown(
     """
     <style>
-    /* Global Background & Font Colors */
     .stApp {
-        background-color: #050505;
-        color: #d4af37;
+        background-color: #0e1117;
+        color: #f0f2f6;
     }
-    
-    /* Sidebar Styling */
     section[data-testid="stSidebar"] {
-        background-color: #0b0b0b;
-        border-right: 1px solid #d4af37;
+        background-color: #161b22;
+        border-right: 1px solid #30363d;
     }
     section[data-testid="stSidebar"] .stRadio label {
-        color: #d4af37 !important;
+        color: #f0f2f6 !important;
         font-weight: bold;
     }
-
-    /* Metric Cards and Containers */
-    div.metric-card, div[data-testid="stVerticalBlock"] > div {
-        background-color: #111111;
-        border: 1px solid #d4af37;
-        border-radius: 8px;
-        padding: 15px;
-        color: #d4af37;
+    /* Remove harsh box borders and backgrounds */
+    div[data-testid="stVerticalBlock"] > div {
+        background-color: transparent;
+        border: none;
     }
-
-    /* Headings and Text */
-    h1, h2, h3, h4, h5, h6, p, span, label {
-        color: #d4af37 !important;
+    h1, h2, h3, h4, h5, h6 {
+        color: #fdfbf7 !important;
     }
-
-    /* Buttons Styling */
+    /* Vibrant buttons with green/cream gradient */
     div.stButton > button {
-        background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
-        color: #000000 !important;
+        background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+        color: #ffffff !important;
         font-weight: bold;
         border-radius: 6px;
         border: none;
-        box-shadow: 0px 4px 10px rgba(212, 175, 55, 0.3);
+        padding: 8px 16px;
+        box-shadow: 0px 4px 10px rgba(46, 204, 113, 0.3);
     }
     div.stButton > button:hover {
-        background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 100%);
-        color: #000000 !important;
+        background: linear-gradient(135deg, #27ae60 0%, #219653 100%);
     }
-
-    /* Text Inputs & Selectboxes */
+    /* Clean Input Fields */
     input, textarea, div[data-baseweb="select"] {
-        background-color: #1a1a1a !important;
-        color: #d4af37 !important;
-        border-color: #d4af37 !important;
-    }
-    
-    /* Metrics numbers */
-    div[data-testid="stMetricValue"] {
-        color: #ffcc00 !important;
+        background-color: #21262d !important;
+        color: #f0f2f6 !important;
+        border: 1px solid #30363d !important;
+        border-radius: 6px;
     }
     </style>
 """,
@@ -76,11 +61,11 @@ st.markdown(
 
 # Sidebar Navigation
 st.sidebar.markdown(
-    "<h2 style='text-align: center; color: #d4af37;'>🛡️ AI SECURITY</h2>",
+    "<h2 style='text-align: center; color: #2ecc71;'>AI SECURITY HUB</h2>",
     unsafe_allow_html=True,
 )
 st.sidebar.markdown(
-    "<p style='text-align: center; color: #aa8c2c;'>Smarter Detection | Safer"
+    "<p style='text-align: center; color: #fdfbf7;'>Smarter Detection | Safer"
     " Tomorrow</p>",
     unsafe_allow_html=True,
 )
@@ -89,41 +74,46 @@ st.sidebar.markdown("---")
 menu = st.sidebar.radio(
     "Navigation Menu",
     [
-        "🏠 Home & Scanner",
-        "📊 Advanced Model Analysis",
-        "🌐 Real-Time Threat Intelligence",
-        "🛡️ API & Threat Center",
-        "⚙️ Settings",
+        "Home & Scanner",
+        "Advanced Model Analysis",
+        "Real-Time Threat Intelligence",
+        "API & Threat Center",
+        "Settings",
     ],
 )
 
 # Top Header
 col_title, col_status = st.columns([3, 1])
 with col_title:
-    st.markdown("## 🛡️ Advanced Phishing Detection & Threat Analytics")
+  st.markdown("## Advanced Phishing Detection & Threat Analytics")
 with col_status:
-    st.markdown(
-        "🟢 **System Online**  \n📅 Live Security Active",
-        unsafe_allow_html=True,
-    )
+  st.markdown(
+      "🟢 **System Online**  \n⚡ Live Security Active", unsafe_allow_html=True
+  )
 
 st.markdown("---")
 
 # ==================== HOME & SCANNER TAB ====================
-if menu == "🏠 Home & Scanner":
-
+if menu == "Home & Scanner":
   c1, c2, c3 = st.columns([1.2, 1.2, 1.1])
 
   with c1:
-    st.markdown("### ⚡ Quick Content Scan")
-    scan_mode = st.radio(
-        "Mode", ["Email", "SMS", "URL"], horizontal=True
-    )
-    user_text = st.text_area(
-        "Paste message or link here:",
-        placeholder="e.g., https://secure-login-verify.com",
-        height=110,
-    )
+    st.markdown("### Quick Content / Image Scan")
+    scan_mode = st.radio("Input Type", ["Text Message / URL", "Upload Image"])
+
+    if scan_mode == "Text Message / URL":
+      user_text = st.text_area(
+          "Paste message or link here:",
+          placeholder="e.g., https://secure-login-verify.com",
+          height=100,
+      )
+    else:
+      uploaded_file = st.file_uploader(
+          "Upload Screenshot / Image", type=["png", "jpg", "jpeg"]
+      )
+      user_text = (
+          "Image uploaded for phishing analysis" if uploaded_file else ""
+      )
 
     if st.button("Run Deep Scan"):
       if user_text:
@@ -131,25 +121,30 @@ if menu == "🏠 Home & Scanner":
           time.sleep(1)
         st.session_state["scanned"] = True
       else:
-        st.warning("Please enter text or a link.")
+        st.warning("Please provide text, link, or upload an image.")
 
   with c2:
-    st.markdown("### 🎯 Detection Result")
+    st.markdown("### Detection Result")
     if st.session_state.get("scanned", False):
       st.markdown(
-          "<h3 style='color: #ff3333 !important;'>⚠️ High Risk Phishing"
+          "<h3 style='color: #e74c3c !important;'>🚨 High Risk Phishing"
           " Detected</h3>",
           unsafe_allow_html=True,
       )
-      st.metric(label="Risk Score", value="88.4%", delta="+12.2% Threat")
-      st.markdown("**Confidence Level:** 94.6%")
+      st.metric(label="Calculated Risk Score", value="92.4%", delta="Dangerous")
+      st.markdown("**Confidence Level:** 96.8%")
       st.markdown("**Primary Model:** Random Forest + XGBoost")
-      st.error("🚨 Warning: Malicious patterns identified. Do not click.")
+      st.error(
+          "Warning: Malicious patterns or scam indicators found in content!"
+      )
     else:
-      st.info("Perform a Quick Scan to generate deep threat risk analytics.")
+      st.info(
+          "Perform a Quick Scan or upload an image to generate threat"
+          " analytics."
+      )
 
   with c3:
-    st.markdown("### 📈 Live Performance Metrics")
+    st.markdown("### Live Performance Metrics")
     m1, m2 = st.columns(2)
     m1.metric("Accuracy", "96.4%")
     m2.metric("Precision", "94.1%")
@@ -158,20 +153,22 @@ if menu == "🏠 Home & Scanner":
     m4.metric("F1-Score", "92.9%")
 
   st.markdown("---")
-  st.markdown("### 📊 Advanced Threat Trend & Behavioral Analytics")
-  chart_data = pd.DataFrame(
+  st.markdown(
+      "### 📊 Risk Progression & High-Risk Threat Trend Graph"
+  )  # Requested Feature
+  # Colorful area/line chart tracking safe vs high-risk/phishing detections
+  risk_graph_data = pd.DataFrame(
       {
-          "Phishing Attacks Blocked": [120, 150, 180, 220, 310, 450, 520],
-          "Malicious URLs Filtered": [90, 110, 140, 190, 260, 380, 490],
-          "AI False Positives": [15, 12, 10, 8, 6, 4, 3],
+          "Safe Content": [400, 480, 510, 600, 720, 810, 890],
+          "High Risk / Phishing Detected": [90, 130, 110, 160, 220, 190, 250],
       },
       index=["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
   )
-  st.line_chart(chart_data)
+  st.area_chart(risk_graph_data)
 
 # ==================== MODEL ANALYSIS TAB ====================
-elif menu == "📊 Advanced Model Analysis":
-  st.markdown("### 📊 Multi-Model Comparative Analysis")
+elif menu == "Advanced Model Analysis":
+  st.markdown("### Multi-Model Comparative Analysis")
   model_perf = pd.DataFrame(
       {
           "Machine Learning Model": [
@@ -189,15 +186,15 @@ elif menu == "📊 Advanced Model Analysis":
   st.dataframe(model_perf, use_container_width=True)
 
 # ==================== THREAT INTELLIGENCE TAB ====================
-elif menu == "🌐 Real-Time Threat Intelligence":
-  st.markdown("### 🌐 Global Threat Feed & Attack Map Matrix")
+elif menu == "Real-Time Threat Intelligence":
+  st.markdown("### Global Threat Feed & Attack Map Matrix")
   t1, t2, t3, t4 = st.columns(4)
   t1.metric("Active Botnets", "42")
   t2.metric("Blocked Domains", "1,420")
   t3.metric("Phishing Signatures", "8,930")
   t4.metric("Global Server Load", "14.2%")
 
-  st.markdown("#### 🌍 Live Attack Coordinates (Simulated Heatmap)")
+  st.markdown("#### Live Attack Coordinates (Simulated Heatmap)")
   map_data = pd.DataFrame(
       {
           "lat": [13.0827, 37.7749, 51.5074, 35.6762, 1.3521],
@@ -206,12 +203,11 @@ elif menu == "🌐 Real-Time Threat Intelligence":
   )
   st.map(map_data)
 
-# ==================== API & THREAT CENTER (NEW FEATURES) ====================
-elif menu == "🛡️ API & Threat Center":
-  st.markdown("### 🔌 API Anomaly Monitor")
+# ==================== API & THREAT CENTER ====================
+elif menu == "API & Threat Center":
+  st.markdown("### API Anomaly Monitor")
   st.markdown(
-      "API request-களில் அசாதாரண traffic, அதிகப்படியான request-கள் மற்றும்"
-      " பிழைகளைக் கண்டறியலாம்."
+      "Monitor unusual traffic spikes, high request rates, and API errors."
   )
 
   api_col1, api_col2, api_col3 = st.columns(3)
@@ -229,10 +225,10 @@ elif menu == "🛡️ API & Threat Center":
   st.line_chart(api_traffic_data)
 
   st.markdown("---")
-  st.markdown("### 🚨 Threat Monitoring & Alert Center")
+  st.markdown("### Threat Monitoring & Alert Center")
   st.markdown(
-      "High-risk detection-களுக்கு alerts, timestamps, threat categories"
-      " மற்றும் investigation status காட்டலாம்."
+      "View high-risk detection alerts, timestamps, threat categories, and"
+      " investigation statuses."
   )
 
   alerts_data = pd.DataFrame(
@@ -262,11 +258,11 @@ elif menu == "🛡️ API & Threat Center":
   st.dataframe(alerts_data, use_container_width=True)
 
 # ==================== SETTINGS TAB ====================
-elif menu == "⚙️ Settings":
-  st.markdown("### ⚙️ System Configuration & Thresholds")
+elif menu == "Settings":
+  st.markdown("### System Configuration & Thresholds")
   st.slider("AI Sensitivity Threshold (%)", 50, 99, 85)
-  st.text_input("API Security Key", "sk-gold-sec-998821-xyz")
+  st.text_input("API Security Key", "sk-colorful-sec-998821-xyz")
   st.checkbox("Enable Real-time Threat Alerts", value=True)
   st.checkbox("Auto-block Suspicious IP Addresses", value=True)
   if st.button("Save Security Preferences"):
-    st.success("Preferences updated with dark gold encryption protocols!")
+    st.success("Preferences updated successfully with vibrant color profiles!")
