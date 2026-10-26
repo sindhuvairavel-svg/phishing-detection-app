@@ -92,6 +92,7 @@ menu = st.sidebar.radio(
         "🏠 Home & Scanner",
         "📊 Advanced Model Analysis",
         "🌐 Real-Time Threat Intelligence",
+        "🛡️ API & Threat Center",
         "⚙️ Settings",
     ],
 )
@@ -99,9 +100,7 @@ menu = st.sidebar.radio(
 # Top Header
 col_title, col_status = st.columns([3, 1])
 with col_title:
-    st.markdown(
-        "## 🛡️ Advanced Phishing Detection & Threat Analytics"
-    )
+    st.markdown("## 🛡️ Advanced Phishing Detection & Threat Analytics")
 with col_status:
     st.markdown(
         "🟢 **System Online**  \n📅 Live Security Active",
@@ -147,9 +146,7 @@ if menu == "🏠 Home & Scanner":
       st.markdown("**Primary Model:** Random Forest + XGBoost")
       st.error("🚨 Warning: Malicious patterns identified. Do not click.")
     else:
-      st.info(
-          "Perform a Quick Scan to generate deep threat risk analytics."
-      )
+      st.info("Perform a Quick Scan to generate deep threat risk analytics.")
 
   with c3:
     st.markdown("### 📈 Live Performance Metrics")
@@ -161,37 +158,20 @@ if menu == "🏠 Home & Scanner":
     m4.metric("F1-Score", "92.9%")
 
   st.markdown("---")
-
-  # Advanced Charts Section
   st.markdown("### 📊 Advanced Threat Trend & Behavioral Analytics")
-  
-  # Generating advanced multi-line chart data
   chart_data = pd.DataFrame(
       {
           "Phishing Attacks Blocked": [120, 150, 180, 220, 310, 450, 520],
           "Malicious URLs Filtered": [90, 110, 140, 190, 260, 380, 490],
           "AI False Positives": [15, 12, 10, 8, 6, 4, 3],
       },
-      index=[
-          "Mon",
-          "Tue",
-          "Wed",
-          "Thu",
-          "Fri",
-          "Sat",
-          "Sun",
-      ],
+      index=["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
   )
   st.line_chart(chart_data)
 
 # ==================== MODEL ANALYSIS TAB ====================
 elif menu == "📊 Advanced Model Analysis":
   st.markdown("### 📊 Multi-Model Comparative Analysis")
-  st.markdown(
-      "Detailed performance breakdown across deep learning and machine learning"
-      " classifiers."
-  )
-
   model_perf = pd.DataFrame(
       {
           "Machine Learning Model": [
@@ -205,14 +185,12 @@ elif menu == "📊 Advanced Model Analysis":
           "Processing Speed (ms)": [12, 15, 28, 8, 5],
       }
   )
-
   st.bar_chart(model_perf.set_index("Machine Learning Model")["Accuracy (%)"])
   st.dataframe(model_perf, use_container_width=True)
 
 # ==================== THREAT INTELLIGENCE TAB ====================
 elif menu == "🌐 Real-Time Threat Intelligence":
   st.markdown("### 🌐 Global Threat Feed & Attack Map Matrix")
-
   t1, t2, t3, t4 = st.columns(4)
   t1.metric("Active Botnets", "42")
   t2.metric("Blocked Domains", "1,420")
@@ -227,6 +205,61 @@ elif menu == "🌐 Real-Time Threat Intelligence":
       }
   )
   st.map(map_data)
+
+# ==================== API & THREAT CENTER (NEW FEATURES) ====================
+elif menu == "🛡️ API & Threat Center":
+  st.markdown("### 🔌 API Anomaly Monitor")
+  st.markdown(
+      "API request-களில் அசாதாரண traffic, அதிகப்படியான request-கள் மற்றும்"
+      " பிழைகளைக் கண்டறியலாம்."
+  )
+
+  api_col1, api_col2, api_col3 = st.columns(3)
+  api_col1.metric("Total Requests (24h)", "45,210", "+14% Spike")
+  api_col2.metric("Anomaly Rate", "0.42%", "-0.05%")
+  api_col3.metric("API Error Rate", "1.18%", "Normal")
+
+  api_traffic_data = pd.DataFrame(
+      {
+          "Normal Traffic": [300, 450, 400, 600, 750, 500, 650],
+          "Anomalous Requests": [10, 45, 12, 85, 30, 15, 50],
+      },
+      index=["12 AM", "4 AM", "8 AM", "12 PM", "4 PM", "8 PM", "11 PM"],
+  )
+  st.line_chart(api_traffic_data)
+
+  st.markdown("---")
+  st.markdown("### 🚨 Threat Monitoring & Alert Center")
+  st.markdown(
+      "High-risk detection-களுக்கு alerts, timestamps, threat categories"
+      " மற்றும் investigation status காட்டலாம்."
+  )
+
+  alerts_data = pd.DataFrame(
+      {
+          "Alert ID": ["ALT-1092", "ALT-1093", "ALT-1094", "ALT-1095"],
+          "Timestamp": [
+              "2026-10-26 19:10",
+              "2026-10-26 18:45",
+              "2026-10-26 17:20",
+              "2026-10-26 16:05",
+          ],
+          "Threat Category": [
+              "Credential Harvesting",
+              "Malicious Redirect",
+              "Spear Phishing",
+              "C2 Beaconing",
+          ],
+          "Risk Level": ["High", "Critical", "High", "Medium"],
+          "Investigation Status": [
+              "Under Review",
+              "Blocked & Resolved",
+              "Investigating",
+              "Resolved",
+          ],
+      }
+  )
+  st.dataframe(alerts_data, use_container_width=True)
 
 # ==================== SETTINGS TAB ====================
 elif menu == "⚙️ Settings":
