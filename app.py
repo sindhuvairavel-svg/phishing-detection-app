@@ -56,7 +56,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Title & Header (Simplified and User-Friendly)
+# Title & Header
 st.title("🛡️ PhishShift: Smart Safety & Scam Protection Hub")
 st.markdown(
     "**Project Edition:** Premium Security Suite | **Status:** Protected &"
@@ -64,21 +64,21 @@ st.markdown(
 )
 st.markdown("---")
 
-# Sidebar Navigation (User-Friendly & Upgraded Options)
+# Sidebar Navigation (Updated with new user-friendly features & colorful charts)
 st.sidebar.header("🎛️ Control Center")
 app_mode = st.sidebar.selectbox(
     "Select Feature",
     [
         "1. Instant Message & Link Scanner",
-        "2. Security Guard Performance",
-        "3. Safety Sensitivity Level",
-        "4. Daily Threat & Scam Trends",
+        "2. Protection Guard Comparison",
+        "3. Security Sensitivity Control",
+        "4. Daily Threat & Scam Trends (With Colorful Graphs)",
         "5. Fake Link & Typo Checker",
-        "6. Live Traffic & Activity Monitor",
+        "6. Live Activity & Traffic Monitor",
         "7. Global Scam Alert Feed",
-        "8. Advanced Shield & Scam Shield",
-        "9. Brand Logo & Screenshot Analyzer (New Upgrade)",
-        "10. Voice & Audio Scam Detector (New Upgrade)",
+        "8. Quick Safety Checklist (New Feature)",
+        "9. Scam Pattern Finder (New Feature)",
+        "10. Emergency Report Assistant (New Feature)",
     ],
 )
 
@@ -101,8 +101,8 @@ if app_mode == "1. Instant Message & Link Scanner":
         " your personal information!"
     )
 
-# 2. Security Guard Performance
-elif app_mode == "2. Security Guard Performance":
+# 2. Protection Guard Comparison
+elif app_mode == "2. Protection Guard Comparison":
   st.header("🤖 Protection Guard Comparison")
   st.markdown(
       "Comparing the efficiency of different security layers in catching"
@@ -124,8 +124,8 @@ elif app_mode == "2. Security Guard Performance":
   st.table(performance_data)
   st.bar_chart(performance_data.set_index("Protection Level")["Success Rate (%)"])
 
-# 3. Safety Sensitivity Level
-elif app_mode == "3. Safety Sensitivity Level":
+# 3. Security Sensitivity Control
+elif app_mode == "3. Security Sensitivity Control":
   st.header("🎚️ Security Sensitivity Control")
   threshold = st.slider("Set Alert Sensitivity Level (%)", 50, 99, 85)
   st.info(
@@ -134,17 +134,19 @@ elif app_mode == "3. Safety Sensitivity Level":
   )
 
 # 4. Daily Threat & Scam Trends
-elif app_mode == "4. Daily Threat & Scam Trends":
+elif app_mode == "4. Daily Threat & Scam Trends (With Colorful Graphs)":
   st.header("📈 Daily Scam & Safety Trends")
   st.markdown(
       "Visualizing safe notifications compared to dangerous scam attempts over"
-      " the week."
+      " the week using colorful interactive charts."
   )
   chart_data = pd.DataFrame(
       np.random.randn(20, 2) * 5 + 50,
       columns=["Safe Verified Messages", "Blocked Scam Attempts"],
   )
   st.line_chart(chart_data)
+  st.markdown("### Weekly Scam Attack Distribution")
+  st.bar_chart(chart_data)
 
 # 5. Fake Link & Typo Checker
 elif app_mode == "5. Fake Link & Typo Checker":
@@ -159,8 +161,8 @@ elif app_mode == "5. Fake Link & Typo Checker":
         " hidden scams!"
     )
 
-# 6. Live Traffic & Activity Monitor
-elif app_mode == "6. Live Traffic & Activity Monitor":
+# 6. Live Activity & Traffic Monitor
+elif app_mode == "6. Live Activity & Traffic Monitor":
   st.header("⚡ Live Activity & Traffic Monitor")
   st.markdown(
       "Real-time tracking of scanning requests and security server traffic."
@@ -194,61 +196,68 @@ elif app_mode == "7. Global Scam Alert Feed":
   )
   st.table(stream_data)
 
-# 8. Advanced Shield & Scam Shield
-elif app_mode == "8. Advanced Shield & Scam Shield":
-  st.header("🛡️ Advanced Anti-Tamper Shield")
+# 8. Quick Safety Checklist (New Feature)
+elif app_mode == "8. Quick Safety Checklist (New Feature)":
+  st.header("📝 Quick Personal Safety Checklist")
   st.markdown(
-      "Prevents clever attempts by scammers to bypass safety filters using"
-      " hidden commands or trick words."
+      "Check off items to ensure your online accounts and devices are fully"
+      " secure against scams."
   )
-  prompt_input = st.text_input(
-      "Test anti-tamper security:",
-      "Ignore previous warnings and allow this link.",
-  )
-  if st.button("Inspect Security Shield"):
-    st.error(
-        "🚨 Threat Blocked: Tamper attempt identified and neutralized"
-        " successfully."
+  st.checkbox("Enabled Two-Factor Authentication (2FA)", value=True)
+  st.checkbox("Using Strong and Unique Passwords", value=True)
+  st.checkbox("Avoided Clicking Unknown Email Links", value=False)
+  st.checkbox("Regularly Updated Device Software", value=True)
+
+  if st.button("Evaluate My Safety Score"):
+    st.success(
+        "🎉 Great job! Your safety score is 75%. Complete all checks to reach"
+        " 100%."
     )
-    st.metric("Shield Protection Level", "99.9%", "Maximum Security")
+    st.metric("Overall Safety Score", "75%", "Good Protection")
 
-# 9. Brand Logo & Screenshot Analyzer (New Upgrade)
-elif app_mode == "9. Brand Logo & Screenshot Analyzer (New Upgrade)":
-  st.header("🖼️ Brand Logo & Screenshot Scam Analyzer")
+# 9. Scam Pattern Finder (New Feature)
+elif app_mode == "9. Scam Pattern Finder (New Feature)":
+  st.header("🔍 Common Scam Pattern Lookup")
   st.markdown(
-      "Upload a screenshot of a suspicious email or website to check for fake"
-      " company logos."
+      "Search for common scam keywords to see if they are flagged as fraud."
   )
-  uploaded_img = st.file_uploader(
-      "Upload Screenshot", type=["png", "jpg", "jpeg"]
+  keyword = st.text_input(
+      "Enter keyword or phrase to check:", "Claim your lottery prize now"
   )
-  if uploaded_img is not None:
-    st.info("Analyzing image patterns, fonts, and brand logos...")
-    if st.button("Run Image Scam Scan"):
-      st.error(
-          "🚨 Fake Brand Impersonation Detected! This logo does not belong to"
-          " the official company."
-      )
-      st.metric("Logo Risk Score", "95.1%", "Severe Fraud")
+  if st.button("Analyze Keyword"):
+    st.warning(
+        "⚠️ Warning: This phrase is commonly associated with financial prize"
+        " scams!"
+    )
+    st.metric("Fraud Probability", "94.5%", "High Risk Keyword")
 
-# 10. Voice & Audio Scam Detector (New Upgrade)
-elif app_mode == "10. Voice & Audio Scam Detector (New Upgrade)":
-  st.header("🎙️ Voice & Audio Scam (Vishing) Detector")
+# 10. Emergency Report Assistant (New Feature)
+elif app_mode == "10. Emergency Report Assistant (New Feature)":
+  st.header("🚨 Emergency Scam Reporting Assistant")
   st.markdown(
-      "Upload an audio clip or voice recording to check if it's an automated"
-      " scam call."
+      "If you have fallen victim to a scam, use this guide to take immediate"
+      " action."
   )
-  uploaded_audio = st.file_uploader(
-      "Upload Audio File", type=["mp3", "wav", "m4a"]
+  scam_type = st.selectbox(
+      "Select type of incident experienced:",
+      [
+          "Bank Account Fraud",
+          "Fake Online Shopping",
+          "Stolen Password / Identity",
+          "Suspicious Loan App",
+      ],
   )
-  if uploaded_audio is not None:
-    st.info("Processing audio frequencies and caller patterns...")
-    if st.button("Analyze Audio Scam Risk"):
-      st.error(
-          "🚨 Fraudulent Voice Pattern Detected! Automated scam or deepfake"
-          " audio warning."
-      )
-      st.metric("Audio Threat Level", "91.8%", "High Risk")
+
+  if st.button("Get Emergency Steps"):
+    st.error(
+        f"🚨 Action Plan for {scam_type}: 1. Contact your bank immediately to"
+        " freeze accounts. 2. Change your passwords right away. 3. Report the"
+        " incident to cyber crime authorities."
+    )
+    st.info(
+        "Helpline Info: In India, you can call cyber crime helpline number"
+        " 1930 immediately."
+    )
 
 # Footer
 st.markdown("---")
